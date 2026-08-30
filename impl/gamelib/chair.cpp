@@ -9,7 +9,7 @@ Chair::Chair(std::shared_ptr<jt::Box2DWorldInterface> world)
     b2BodyDef bodyDef;
     bodyDef.fixedRotation = true;
     bodyDef.type = b2_dynamicBody;
-    bodyDef.linearDamping = 1.0;
+    bodyDef.linearDamping = GP::PlayerLinearDamping();
 
     m_physicsObject = std::make_shared<jt::Box2DObject>(world, &bodyDef);
     m_physicsObject->setPosition(GP::GetScreenSize() * 0.5f);
@@ -27,17 +27,20 @@ void Chair::doUpdate(float const elapsed)
 {
     auto const& keyboard = getGame()->input().keyboard();
 
-    auto const forceStrength = 1000.0f;
+    auto const force_strength = GP::PlayerMoveStrength();
+
+    auto const angle_to_turn_in_degrees = GP::PlayerTurnAngleInDegree();
 
     if (keyboard->justPressed(jt::KeyCode::A)) {
-        m_physicsObject->addForceToCenter(forceStrength * m_forward_vector);
+        m_physicsObject->addForceToCenter(force_strength * m_forward_vector);
         m_forward_vectorLast = m_forward_vector;
-        m_forward_vector = jt::MathHelper::rotateBy(m_forward_vector, -10);
+        m_forward_vector = jt::MathHelper::rotateBy(m_forward_vector, -angle_to_turn_in_degrees);
     }
+
     if (keyboard->justPressed(jt::KeyCode::D)) {
-        m_physicsObject->addForceToCenter(forceStrength * m_forward_vector);
+        m_physicsObject->addForceToCenter(force_strength * m_forward_vector);
         m_forward_vectorLast = m_forward_vector;
-        m_forward_vector = jt::MathHelper::rotateBy(m_forward_vector, 10);
+        m_forward_vector = jt::MathHelper::rotateBy(m_forward_vector, angle_to_turn_in_degrees);
     }
 
     m_shape->setRotation(-jt::MathHelper::angleOf(m_forward_vectorLast));

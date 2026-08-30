@@ -34,4 +34,11 @@ jt::Palette GP::getPalette()
 int GP::PhysicVelocityIterations() { return 20; }
 
 int GP::PhysicPositionIterations() { return 20; }
+
 jt::Vector2f GP::PlayerSize() { return jt::Vector2f { 16.0f, 16.0f }; }
+
+float GP::PlayerMoveStrength() { return 1500.0f; }
+
+float GP::PlayerTurnAngleInDegree() { return 8.0f; }
+
+float GP::PlayerLinearDamping() { return 1.5; }
