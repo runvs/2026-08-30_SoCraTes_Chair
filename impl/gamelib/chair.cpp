@@ -11,8 +11,14 @@ Chair::Chair(std::shared_ptr<jt::Box2DWorldInterface> world)
     bodyDef.type = b2_dynamicBody;
     bodyDef.linearDamping = GP::PlayerLinearDamping();
 
+    b2FixtureDef fixtureDef;
+    b2PolygonShape boxCollider { };
+    boxCollider.SetAsBox(8, 8);
+    fixtureDef.shape = &boxCollider;
+
     m_physicsObject = std::make_shared<jt::Box2DObject>(world, &bodyDef);
-    m_physicsObject->setPosition(GP::GetScreenSize() * 0.5f);
+    m_physicsObject->getB2Body()->CreateFixture(&fixtureDef);
+    m_physicsObject->setPosition({ 30, 30 });
     m_forward_vector = jt::Vector2f { 1.0f, 0.0f };
 }
 

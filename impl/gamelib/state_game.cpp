@@ -1,4 +1,7 @@
 ﻿#include "state_game.hpp"
+
+#include "tilemap/tile_layer.hpp"
+#include "tilemap/tileson_loader.hpp"
 #include <box2dwrapper/box2d_world_impl.hpp>
 #include <color/color.hpp>
 #include <game_interface.hpp>
@@ -6,6 +9,37 @@
 #include <screeneffects/vignette.hpp>
 #include <shape.hpp>
 #include <state_menu.hpp>
+
+void StateGame::loadColliders(jt::tilemap::TilesonLoader& loader)
+{
+    auto tileCollisions = loader.loadCollisionsFromLayer("ground");
+
+    tileCollisions.refineColliders(8);
+    for (auto const& r : tileCollisions.getRects()) {
+        b2BodyDef bodyDef;
+        bodyDef.fixedRotation = true;
+        bodyDef.type = b2_staticBody;
+        bodyDef.position.Set(r.left + r.width / 2.0f, r.top + r.height / 2.0f);
+
+        b2FixtureDef fixtureDef;
+        b2PolygonShape boxCollider { };
+        boxCollider.SetAsBox(r.width / 2.0f, r.height / 2.0f);
+        fixtureDef.shape = &boxCollider;
+
+        auto collider = std::make_shared<jt::Box2DObject>(m_world, &bodyDef);
+        collider->getB2Body()->CreateFixture(&fixtureDef);
+
+        m_colliders.push_back(collider);
+    }
+
+    std::cout << m_colliders.size();
+}
+
+void StateGame::loadLevelTileLayer(jt::tilemap::TilesonLoader& loader)
+{
+    m_tileLayerGround = std::make_shared<jt::tilemap::TileLayer>(
+        loader.loadTilesFromLayer("ground", textureManager(), "assets/"));
+}
 
 void StateGame::onCreate()
 {
@@ -21,6 +55,12 @@ void StateGame::onCreate()
     m_background->setColor(GP::PaletteBackground());
     m_background->setIgnoreCamMovement(true);
     m_background->update(0.0f);
+
+    jt::tilemap::TilesonLoader loader { getGame()->cache().getTilemapCache(), "assets/level.json" };
+
+
+    loadLevelTileLayer(loader);
+    loadColliders(loader);
 
     createChair();
 
@@ -41,6 +81,7 @@ void StateGame::createChair()
 
 void StateGame::onUpdate(float const elapsed)
 {
+    m_tileLayerGround->update(elapsed);
     if (m_running) {
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
         // update game logic here
@@ -63,6 +104,7 @@ void StateGame::onUpdate(float const elapsed)
 void StateGame::onDraw() const
 {
     m_background->draw(renderTarget());
+    m_tileLayerGround->draw(renderTarget());
     drawObjects();
     m_vignette->draw();
 }

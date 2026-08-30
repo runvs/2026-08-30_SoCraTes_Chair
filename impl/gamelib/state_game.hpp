@@ -2,6 +2,7 @@
 #define GAME_STATE_GAME_HPP
 
 #include "chair.hpp"
+#include "tilemap/tile_layer.hpp"
 #include <box2dwrapper/box2d_world_interface.hpp>
 #include <game_state.hpp>
 #include <memory>
@@ -9,6 +10,9 @@
 
 // fwd decls
 namespace jt {
+namespace tilemap {
+class TilesonLoader;
+}
 class Shape;
 class Sprite;
 class Vignette;
@@ -32,7 +36,11 @@ private:
     int m_scoreP2 { 0 };
 
     std::shared_ptr<Chair> m_chair;
+    std::vector<std::shared_ptr<jt::Box2DObject>> m_colliders { };
+    std::shared_ptr<jt::tilemap::TileLayer> m_tileLayerGround;
 
+    void loadColliders(jt::tilemap::TilesonLoader& loader);
+    void loadLevelTileLayer(jt::tilemap::TilesonLoader& loader);
     void onCreate() override;
     void onEnter() override;
     void onUpdate(float elapsed) override;
