@@ -57,7 +57,6 @@ void StateGame::onCreate()
 
     jt::tilemap::TilesonLoader loader { getGame()->cache().getTilemapCache(), "assets/level.json" };
 
-
     loadLevelTileLayer(loader);
     loadColliders(loader);
 
@@ -86,8 +85,6 @@ void StateGame::onUpdate(float const elapsed)
         auto cameraOffset = GP::GetScreenSize() * 0.5;
 
         getGame()->gfx().camera().setCamOffset(camPosition-cameraOffset);
-
-        
 
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
         // update game logic here
