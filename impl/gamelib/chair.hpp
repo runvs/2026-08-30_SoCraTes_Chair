@@ -14,6 +14,8 @@ public:
 
     std::shared_ptr<jt::Shape> m_shape;
     std::shared_ptr<jt::Box2DObject> m_physicsObject;
+    jt::Vector2f m_forward_vector;
+    jt::Vector2f m_forward_vectorLast;
 };
 
 #endif // CHAIRJAM_CHAIR_HPP
