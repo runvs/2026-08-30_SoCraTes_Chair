@@ -32,7 +32,6 @@ void StateGame::loadColliders(jt::tilemap::TilesonLoader& loader)
         m_colliders.push_back(collider);
     }
 
-    std::cout << m_colliders.size();
 }
 
 void StateGame::loadLevelTileLayer(jt::tilemap::TilesonLoader& loader)
@@ -83,6 +82,13 @@ void StateGame::onUpdate(float const elapsed)
 {
     m_tileLayerGround->update(elapsed);
     if (m_running) {
+        auto camPosition = m_chair->m_physicsObject->getPosition();
+        auto cameraOffset = GP::GetScreenSize() * 0.5;
+
+        getGame()->gfx().camera().setCamOffset(camPosition-cameraOffset);
+
+        
+
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
         // update game logic here
         if (getGame()->input().keyboard()->justPressed(jt::KeyCode::A)) {
