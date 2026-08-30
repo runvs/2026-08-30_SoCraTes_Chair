@@ -24,8 +24,7 @@ Chair::Chair(std::shared_ptr<jt::Box2DWorldInterface> world)
 
 void Chair::doCreate()
 {
-    m_shape = std::make_shared<jt::Shape>();
-    m_shape->makeRect({ 16, 16 }, textureManager());
+    m_shape = std::make_shared<jt::Sprite>("assets/chair.png", textureManager());
     m_shape->setOrigin(jt::OriginMode::CENTER);
 }
 
