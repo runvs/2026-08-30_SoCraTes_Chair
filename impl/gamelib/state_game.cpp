@@ -22,7 +22,7 @@ void StateGame::onCreate()
     m_background->setIgnoreCamMovement(true);
     m_background->update(0.0f);
 
-    createPlayer();
+    createChair();
 
     m_vignette = std::make_shared<jt::Vignette>(GP::GetScreenSize());
     add(m_vignette);
@@ -33,7 +33,11 @@ void StateGame::onCreate()
 
 void StateGame::onEnter() { }
 
-void StateGame::createPlayer() { }
+void StateGame::createChair()
+{
+    m_chair = std::make_shared<Chair>(m_world);
+    add(m_chair);
+}
 
 void StateGame::onUpdate(float const elapsed)
 {

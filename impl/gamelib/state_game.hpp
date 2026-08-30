@@ -1,6 +1,7 @@
 ﻿#ifndef GAME_STATE_GAME_HPP
 #define GAME_STATE_GAME_HPP
 
+#include "chair.hpp"
 #include <box2dwrapper/box2d_world_interface.hpp>
 #include <game_state.hpp>
 #include <memory>
@@ -30,13 +31,15 @@ private:
     int m_scoreP1 { 0 };
     int m_scoreP2 { 0 };
 
+    std::shared_ptr<Chair> m_chair;
+
     void onCreate() override;
     void onEnter() override;
     void onUpdate(float elapsed) override;
     void onDraw() const override;
 
     void endGame();
-    void createPlayer();
+    void createChair();
 };
 
 #endif
