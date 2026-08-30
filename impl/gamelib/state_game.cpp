@@ -3,7 +3,6 @@
 #include <color/color.hpp>
 #include <game_interface.hpp>
 #include <game_properties.hpp>
-#include <hud/hud.hpp>
 #include <screeneffects/vignette.hpp>
 #include <shape.hpp>
 #include <state_menu.hpp>
@@ -27,8 +26,6 @@ void StateGame::onCreate()
 
     m_vignette = std::make_shared<jt::Vignette>(GP::GetScreenSize());
     add(m_vignette);
-    m_hud = std::make_shared<Hud>();
-    add(m_hud);
 
     // StateGame will call drawObjects itself.
     setAutoDraw(false);
@@ -45,11 +42,9 @@ void StateGame::onUpdate(float const elapsed)
         // update game logic here
         if (getGame()->input().keyboard()->justPressed(jt::KeyCode::A)) {
             m_scoreP1++;
-            m_hud->getObserverScoreP1()->notify(m_scoreP1);
         }
         if (getGame()->input().keyboard()->justPressed(jt::KeyCode::D)) {
             m_scoreP2++;
-            m_hud->getObserverScoreP2()->notify(m_scoreP2);
         }
         if (getGame()->input().keyboard()->pressed(jt::KeyCode::LShift)
             && getGame()->input().keyboard()->pressed(jt::KeyCode::Escape)) {
@@ -66,7 +61,6 @@ void StateGame::onDraw() const
     m_background->draw(renderTarget());
     drawObjects();
     m_vignette->draw();
-    m_hud->draw();
 }
 
 void StateGame::endGame()
