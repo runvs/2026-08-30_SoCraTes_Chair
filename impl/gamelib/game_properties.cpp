@@ -39,6 +39,6 @@ jt::Vector2f GP::PlayerSize() { return jt::Vector2f { 16.0f, 16.0f }; }
 
 float GP::PlayerMoveStrength() { return 1500.0f; }
 
-float GP::PlayerTurnAngleInDegree() { return 8.0f; }
+float GP::PlayerTurnAngleInDegree() { return 9.0f; }
 
-float GP::PlayerLinearDamping() { return 1.5; }
+float GP::PlayerLinearDamping() { return 1.15; }

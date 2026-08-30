@@ -12,9 +12,10 @@ Chair::Chair(std::shared_ptr<jt::Box2DWorldInterface> world)
     bodyDef.linearDamping = GP::PlayerLinearDamping();
 
     b2FixtureDef fixtureDef;
-    b2PolygonShape boxCollider { };
-    boxCollider.SetAsBox(8, 8);
-    fixtureDef.shape = &boxCollider;
+    fixtureDef.restitution = 0.5f;
+    b2CircleShape circleCollider { };
+    circleCollider.m_radius = 6;
+    fixtureDef.shape = &circleCollider;
 
     m_physicsObject = std::make_shared<jt::Box2DObject>(world, &bodyDef);
     m_physicsObject->getB2Body()->CreateFixture(&fixtureDef);
@@ -36,13 +37,13 @@ void Chair::doUpdate(float const elapsed)
 
     auto const angle_to_turn_in_degrees = GP::PlayerTurnAngleInDegree();
 
-    if (keyboard->justPressed(jt::KeyCode::A)) {
+    if (keyboard->justPressed(jt::KeyCode::A) || keyboard->justPressed(jt::KeyCode::Left)) {
         m_physicsObject->addForceToCenter(force_strength * m_forward_vector);
         m_forward_vectorLast = m_forward_vector;
         m_forward_vector = jt::MathHelper::rotateBy(m_forward_vector, -angle_to_turn_in_degrees);
     }
 
-    if (keyboard->justPressed(jt::KeyCode::D)) {
+    if (keyboard->justPressed(jt::KeyCode::D) || keyboard->justPressed(jt::KeyCode::Right)) {
         m_physicsObject->addForceToCenter(force_strength * m_forward_vector);
         m_forward_vectorLast = m_forward_vector;
         m_forward_vector = jt::MathHelper::rotateBy(m_forward_vector, angle_to_turn_in_degrees);
