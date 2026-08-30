@@ -58,7 +58,6 @@ void StateGame::onCreate()
 
     jt::tilemap::TilesonLoader loader { getGame()->cache().getTilemapCache(), "assets/level.json" };
 
-
     loadLevelTileLayer(loader);
     loadColliders(loader);
 
@@ -83,6 +82,7 @@ void StateGame::onUpdate(float const elapsed)
 {
     m_tileLayerGround->update(elapsed);
     if (m_running) {
+        
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
         // update game logic here
         if (getGame()->input().keyboard()->justPressed(jt::KeyCode::A)) {
